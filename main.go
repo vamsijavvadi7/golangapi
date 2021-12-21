@@ -6,6 +6,7 @@ import (
 	"os"
 	"github.com/joho/godotenv"
 	"math/rand"
+	
 	"net/http"
 	"strconv"
     "github.com/gorilla/mux"
@@ -35,7 +36,7 @@ func loginCheck(w http.ResponseWriter, r *http.Request) {
 		Status string `json:"status"`
 		Role string `json:"role"`
 	}
-	res:=Result{Status:"False",Role:"Student"}
+	res:=Result{Status:"False",Role:""}
 	for _, item := range persons {
 		if item.Mail== params["email"]  && item.Password==params["password"]{
 			res.Role=item.Role
@@ -107,6 +108,26 @@ func deletePerson(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(persons)
 }
 
+func login(w http.ResponseWriter, r *http.Request){
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r) // Gets params
+	type Result struct{
+		Status string `json:"status"`
+		Role string `json:"role"`
+	}
+	res:=Result{Status:"False",Role:""}
+	for _, item := range persons {
+
+		if item.Mail== params["email"]{
+
+			res.Role=item.Role
+			res.Status="True"
+			json.NewEncoder(w).Encode(res)
+			return
+		}
+	}
+	json.NewEncoder(w).Encode(res)
+}
 // Main function
 func main() {
 	// Init router
@@ -122,7 +143,9 @@ func main() {
 	// Route handles & endpoints
 	r.HandleFunc("/", home).Methods("GET")
 	r.HandleFunc("/people", getPeople).Methods("GET")
+	r.HandleFunc("/login/email/{email}",login).Methods("GET")
 		r.HandleFunc("/login/{email}/{password}",loginCheck).Methods("GET")
+			
 	r.HandleFunc("/people/{id}", getPerson).Methods("GET")
 	r.HandleFunc("/people", createPerson).Methods("POST")
 	r.HandleFunc("/people/{id}", updatePerson).Methods("PUT")
