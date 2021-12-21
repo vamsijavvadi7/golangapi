@@ -85,7 +85,15 @@ func updatePerson(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
+func home(w http.ResponseWriter, r *http.Request){
+type Result struct{
+		Content string `json:"content"`
 
+	}
+	res:=Result{Content:"use postman for this api /people get req gives people int the db.."}
+
+	json.NewEncoder(w).Encode(res)
+}
 // Delete book
 func deletePerson(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
@@ -112,6 +120,7 @@ func main() {
  	
  
 	// Route handles & endpoints
+	r.HandleFunc("/", home).Methods("GET")
 	r.HandleFunc("/people", getPeople).Methods("GET")
 		r.HandleFunc("/login/{email}/{password}",loginCheck).Methods("GET")
 	r.HandleFunc("/people/{id}", getPerson).Methods("GET")
@@ -119,7 +128,6 @@ func main() {
 	r.HandleFunc("/people/{id}", updatePerson).Methods("PUT")
 	r.HandleFunc("/people/{id}", deletePerson).Methods("DELETE")
 
-	
+	// Start server
 	log.Fatal(http.ListenAndServe(":"+port, r))
 }
-
