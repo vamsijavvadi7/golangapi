@@ -137,7 +137,7 @@ func main() {
 	    port := os.Getenv("PORT")
  persons=append(persons,Person{Id:"1",Mail:"18pa1a0561@gmail.com",Password:"Ilovemydad7@",Role: "student"})
  persons=append(persons,Person{Id:"2",Mail:"vamsijavvadi@gmail.com",Password:"Ilovemydad7@",Role: "teacher"})
- 	
+ 	persons=append(persons,Person{Id:"3",Mail:"pramilacheruku001@gmail.com",Password:"Ilovemydad7@",Role: "student"})
  	
  
 	// Route handles & endpoints
